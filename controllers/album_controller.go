@@ -22,7 +22,12 @@ func PostAlbums(c *gin.Context) {
 	if err := c.BindJSON(&newAlbum); err != nil {
 		return
 	}
-
+	for _, a := range albums {
+		if a.ID == newAlbum.ID {
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "album already exists"})
+			return
+		}
+	}
 	albums = append(albums, newAlbum)
 	c.IndentedJSON(http.StatusCreated, newAlbum)
 }
